@@ -1,20 +1,26 @@
-const Message = require("../models/message");
-const User = require("../models/user");
-const { Router } = require("express");
+require("dotenv").config(); // load .env variables
+const { Router } = require("express"); // import router from express
+const User = require("../models/user"); // import user model
+const bcrypt = require("bcryptjs"); // import bcrypt to hash passwords
+const jwt = require("jsonwebtoken"); // import jwt to sign tokens
+const { isLoggedIn } = require("./middleware");
 
-const router = Router();
+const router = Router(); // create router to create route bundle
 
-router.post("/login", async (req, res) => {
+//DESTRUCTURE ENV VARIABLES WITH DEFAULTS
+const SECRET = process.env.SECRET;
+
+// Signup route to create a new user
+router.post("/signup", async (req, res) => {
   try {
-    const candidate = await User.findOne({ userName: req.body.userName });
+    // hash the password
+    req.body.password = await bcrypt.hash(req.body.password, 10);
+    const candidate = await User.findOne({ email: req.body.email });
     if (candidate) {
-      res.status(200).json(candidate);
+      res.status(409).json({ error: "email already exists" });
     } else {
-      const user = new User({
-        userName: req.body.userName,
-      });
-      await user.save();
-      return res.json(user);
+      const user = await User.create(req.body);
+      res.json(user);
     }
   } catch (error) {
     console.log(error);
@@ -22,26 +28,35 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/sendMessage", async (req, res) => {
+// Login route to verify a user and get a token
+router.post("/login", async (req, res) => {
   try {
-    const message = await Message.create(req.body);
-    await message.save();
-    res.json(message);
+    // check if the user exists
+    const user = await User.findOne({ email: req.body.email });
+
+    if (user) {
+      //check if password matches
+      const result = await bcrypt.compare(req.body.password, user.password);
+      if (result) {
+        // sign token and send it in response
+        const token = await jwt.sign({ email: user.email }, SECRET);
+
+        await user.save();
+        res.json({ user, token, userId: user.id });
+      } else {
+        res.status(403).json({ error: "password doesn't match" });
+      }
+    } else {
+      res.status(404).json({ error: "User doesn't exist" });
+    }
   } catch (error) {
-    console.log(error);
     res.status(400).json({ error });
   }
 });
 
-router.get("/messages", async (req, res) => {
+router.get("/logout", isLoggedIn, async (req, res) => {
   try {
-    const receiver = req.query.receiver;
-    const messages = await Message.find();
-    const messagesForFront = messages.filter(
-      (message) => message.receiver === receiver
-    );
-    console.log(messagesForFront);
-    res.status(200).json(messagesForFront);
+    res.status(200).json({ message: "User Logged Out." });
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
