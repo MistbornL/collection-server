@@ -23,6 +23,16 @@ router.get("/", isLoggedIn, async (req, res) => {
   }
 });
 
+router.get("/profile", isLoggedIn, async (req, res) => {
+  try {
+    const email = req.query.email;
+    const profile = await User.findOne({ email });
+    res.status(200).json(profile);
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
 router.delete("/delete/:id", isLoggedIn, async (req, res) => {
   try {
     await User.remove({ _id: req.params.id });
