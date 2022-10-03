@@ -14,6 +14,17 @@ router.get("/", isLoggedIn, async (req, res) => {
   }
 });
 
+router.get("/userCol", isLoggedIn, async (req, res) => {
+  try {
+    const collection = await Collection.find({
+      createdBy: req.query.createdBy,
+    });
+    res.status(200).json(collection);
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
 router.post("/create", isLoggedIn, async (req, res) => {
   try {
     const { createdBy, title, description } = req.body;
