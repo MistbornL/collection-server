@@ -1,14 +1,11 @@
 const { Schema, model } = require("../db/connection");
 
-const UserSchema = new Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, required: true, default: "user" },
+const CollectionSchema = new Schema({
+  createdBy: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String, required: true, unique: true },
 });
 
-// User model
-const User = model("User", UserSchema);
+const Collection = model("Collection", CollectionSchema);
 
-module.exports = User;
+module.exports = Collection;
