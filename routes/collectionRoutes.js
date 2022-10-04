@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { isLoggedIn } = require("../controllers/middleware");
 const Collection = require("../models/collection");
-const { route } = require("./userRoutes");
+const Item = require("../models/item");
 
 const router = Router();
 
@@ -35,6 +35,29 @@ router.post("/create", isLoggedIn, async (req, res) => {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
 });
+
+// ITEM ROUTES
+router.get("/item", isLoggedIn, async (req, res) => {
+  try {
+    const items = await Item.find();
+    res.status(200).json(items);
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
+router.get("/userItem", isLoggedIn, async (req, res) => {
+  try {
+    const item = await Item.find({
+      id: req.query.id,
+    });
+    res.status(200).json(item);
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
+module.exports = router;
 
 // router.delete("/delete/:id", isLoggedIn, async (req, res) => {
 //   try {
