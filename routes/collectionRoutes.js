@@ -5,6 +5,7 @@ const Item = require("../models/item");
 
 const router = Router();
 
+// colleciton routes
 router.get("/", isLoggedIn, async (req, res) => {
   try {
     const collections = await Collection.find();
@@ -57,6 +58,26 @@ router.get("/userItem", isLoggedIn, async (req, res) => {
   }
 });
 
+router.post("/create/item", isLoggedIn, async (req, res) => {
+  try {
+    const { title, description, collectionId, image } = req.body;
+    const item = new Item({ title, description, collectionId, image });
+    await item.save();
+    res.status(200).json({ message: "item has been created." });
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
+router.delete("/delete/item", isLoggedIn, async (req, res) => {
+  try {
+    const id = req.query.id;
+    await Item.findByIdAndDelete(id);
+    res.status(200).json({ message: "item has been deleted." });
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
 module.exports = router;
 
 // router.delete("/delete/:id", isLoggedIn, async (req, res) => {

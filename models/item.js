@@ -1,7 +1,7 @@
 const { Schema, model } = require("../db/connection");
 
 const ItemSchema = new Schema({
-  createdBy: { type: String, required: true },
+  collectionId: { type: String, required: true },
   title: { type: String, required: true },
   description: { type: String, required: true, unique: true },
   image: { type: String, default: "" },
