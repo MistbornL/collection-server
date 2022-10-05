@@ -50,8 +50,9 @@ router.get("/item", isLoggedIn, async (req, res) => {
 router.get("/userItem", isLoggedIn, async (req, res) => {
   try {
     const item = await Item.find({
-      id: req.query.id,
+      collectionId: req.query.id,
     });
+
     res.status(200).json(item);
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
@@ -60,8 +61,14 @@ router.get("/userItem", isLoggedIn, async (req, res) => {
 
 router.post("/create/item", isLoggedIn, async (req, res) => {
   try {
-    const { title, description, collectionId, image } = req.body;
-    const item = new Item({ title, description, collectionId, image });
+    const { createdBy, title, description, collectionId, image } = req.body;
+    const item = new Item({
+      createdBy,
+      title,
+      description,
+      collectionId,
+      image,
+    });
     await item.save();
     res.status(200).json({ message: "item has been created." });
   } catch (e) {
