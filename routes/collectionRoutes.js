@@ -78,6 +78,21 @@ router.delete("/delete/item", isLoggedIn, async (req, res) => {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
 });
+
+router.put("/update/item", isLoggedIn, async (req, res) => {
+  try {
+    const { id, title, description, collectionId, image } = req.body;
+    await Item.findByIdAndUpdate(id, {
+      title,
+      description,
+      collectionId,
+      image,
+    });
+    res.status(200).json({ message: "item has been updated." });
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
 module.exports = router;
 
 // router.delete("/delete/:id", isLoggedIn, async (req, res) => {
