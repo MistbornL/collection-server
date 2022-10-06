@@ -6,7 +6,7 @@ const Item = require("../models/item");
 const router = Router();
 
 // colleciton routes
-router.get("/", isLoggedIn, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const collections = await Collection.find();
     res.status(200).json(collections);
@@ -38,7 +38,7 @@ router.post("/create", isLoggedIn, async (req, res) => {
 });
 
 // ITEM ROUTES
-router.get("/item", isLoggedIn, async (req, res) => {
+router.get("/item", async (req, res) => {
   try {
     const items = await Item.find();
     res.status(200).json(items);
