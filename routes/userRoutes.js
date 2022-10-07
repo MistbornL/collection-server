@@ -33,9 +33,11 @@ router.get("/profile", isLoggedIn, async (req, res) => {
   }
 });
 
-router.delete("/delete/:id", isLoggedIn, async (req, res) => {
+router.delete("/delete/:email", isLoggedIn, async (req, res) => {
+  console.log(req.params);
+  console.log(res);
   try {
-    await User.remove({ _id: req.params.id });
+    await User.remove({ email: req.params.email });
     res.status(200).json({ message: "User has been deleted." });
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });

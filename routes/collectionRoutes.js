@@ -15,10 +15,21 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/userCol", isLoggedIn, async (req, res) => {
+router.get("/userCol", async (req, res) => {
   try {
     const collection = await Collection.find({
       createdBy: req.query.createdBy,
+    });
+    res.status(200).json(collection);
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
+router.get("/specific/:id", async (req, res) => {
+  try {
+    const collection = await Collection.find({
+      _id: req.params.id,
     });
     res.status(200).json(collection);
   } catch (e) {
@@ -37,6 +48,29 @@ router.post("/create", isLoggedIn, async (req, res) => {
   }
 });
 
+router.put("/update/:id", isLoggedIn, async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    await Collection.findByIdAndUpdate(req.params.id, {
+      title,
+      description,
+    });
+    res.status(200).json({ message: "collection has been updated." });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
+router.delete("/delete/:id", isLoggedIn, async (req, res) => {
+  try {
+    await Collection.remove({ _id: req.params.id });
+    res.status(200).json({ message: "collection has been deleted." });
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
 // ITEM ROUTES
 router.get("/item", async (req, res) => {
   try {
@@ -50,7 +84,7 @@ router.get("/item", async (req, res) => {
 router.get("/userItem", isLoggedIn, async (req, res) => {
   try {
     const item = await Item.find({
-      collectionId: req.query.id,
+      _id: req.query.id,
     });
 
     res.status(200).json(item);
@@ -59,6 +93,17 @@ router.get("/userItem", isLoggedIn, async (req, res) => {
   }
 });
 
+router.get("/userItems", async (req, res) => {
+  try {
+    const item = await Item.find({
+      collectionId: req.query.CollectionId,
+    });
+
+    res.status(200).json(item);
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
 router.post("/create/item", isLoggedIn, async (req, res) => {
   try {
     const { createdBy, title, description, collectionId, image } = req.body;
@@ -87,12 +132,17 @@ router.delete("/delete/item", isLoggedIn, async (req, res) => {
 });
 
 router.put("/update/item", isLoggedIn, async (req, res) => {
+  const item = await Item.find({
+    collectionId: req.body.id,
+  });
+  console.log(item);
   try {
-    const { id, title, description, collectionId, image } = req.body;
+    const { id, title, description, image, createdBy } = req.body;
+    console.log(createdBy);
     await Item.findByIdAndUpdate(id, {
+      createdBy,
       title,
       description,
-      collectionId,
       image,
     });
     res.status(200).json({ message: "item has been updated." });
