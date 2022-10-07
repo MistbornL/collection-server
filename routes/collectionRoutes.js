@@ -104,6 +104,7 @@ router.get("/userItems", async (req, res) => {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
 });
+
 router.post("/create/item", isLoggedIn, async (req, res) => {
   try {
     const { createdBy, title, description, collectionId, image } = req.body;
@@ -121,9 +122,10 @@ router.post("/create/item", isLoggedIn, async (req, res) => {
   }
 });
 
-router.delete("/delete/item", isLoggedIn, async (req, res) => {
+router.delete("/delete/item/:id", isLoggedIn, async (req, res) => {
   try {
-    const id = req.query.id;
+    const id = req.params.id;
+
     await Item.findByIdAndDelete(id);
     res.status(200).json({ message: "item has been deleted." });
   } catch (e) {
@@ -131,16 +133,11 @@ router.delete("/delete/item", isLoggedIn, async (req, res) => {
   }
 });
 
-router.put("/update/item", isLoggedIn, async (req, res) => {
-  const item = await Item.find({
-    collectionId: req.body.id,
-  });
-  console.log(item);
+router.put("/item/update/:id", isLoggedIn, async (req, res) => {
   try {
-    const { id, title, description, image, createdBy } = req.body;
-    console.log(createdBy);
+    const { title, description, image } = req.body;
+    const id = req.params.id;
     await Item.findByIdAndUpdate(id, {
-      createdBy,
       title,
       description,
       image,
@@ -150,40 +147,4 @@ router.put("/update/item", isLoggedIn, async (req, res) => {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
 });
-module.exports = router;
-
-// router.delete("/delete/:id", isLoggedIn, async (req, res) => {
-//   try {
-//     await User.remove({ _id: req.params.id });
-//     res.status(200).json({ message: "User has been deleted." });
-//   } catch (e) {
-//     res.status(400).json({ message: "Something went wrong, try again." });
-//   }
-// });
-
-// router.post("/block/:id", isLoggedIn, async (req, res) => {
-//   console.log(req.params);
-//   try {
-//     await User.findByIdAndUpdate(req.params.id, { status: "Blocked" });
-//     res.status(200).json({ message: "User has been Blocked." });
-//   } catch (e) {
-//     res.status(400).json({ message: "Something went wrong, try again." });
-//   }
-// });
-
-// router.post("/unlock/:id", isLoggedIn, async (req, res) => {
-//   try {
-//     const user = await User.findById(req.params.id);
-//     if (user.status === "Blocked") {
-//       user.status = "Offline";
-//       await user.save();
-//       res.status(200).json({ message: "User has been Unlocked." });
-//     } else {
-//       res.status(202).json({ message: "User is not blocked." });
-//     }
-//   } catch (e) {
-//     res.status(400).json({ message: "Something went wrong, try again." });
-//   }
-// });
-
 module.exports = router;
