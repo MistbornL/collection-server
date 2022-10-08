@@ -5,6 +5,7 @@ const cors = require("cors"); // import cors
 const UserRoutes = require("./controllers/userController"); //import User Routes
 const Users = require("./routes/userRoutes");
 const CollectionRoutes = require("./routes/collectionRoutes");
+const TagRoutes = require("./routes/tagRoutes");
 
 //DESTRUCTURE ENV VARIABLES WITH DEFAULT VALUES
 const { PORT = 5000 } = process.env;
@@ -22,7 +23,8 @@ app.get("/", (req, res) => {
 
 app.use("/users", Users);
 app.use("/collection", CollectionRoutes);
-app.use("/user", UserRoutes); // send all "/user" requests to UserRouter for routing
+app.use("/user", UserRoutes);
+app.use("/tag", TagRoutes);
 
 // APP LISTENER
 app.listen(PORT, () => log.green("SERVER STATUS", `Listening on port ${PORT}`));

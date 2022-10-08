@@ -49,11 +49,13 @@ router.post("/create", isLoggedIn, async (req, res) => {
 });
 
 router.put("/update/:id", isLoggedIn, async (req, res) => {
+  console.log(req.body);
   try {
-    const { title, description } = req.body;
+    const { title, description, tags } = req.body;
     await Collection.findByIdAndUpdate(req.params.id, {
       title,
       description,
+      tags,
     });
     res.status(200).json({ message: "collection has been updated." });
   } catch (e) {
@@ -135,12 +137,13 @@ router.delete("/delete/item/:id", isLoggedIn, async (req, res) => {
 
 router.put("/item/update/:id", isLoggedIn, async (req, res) => {
   try {
-    const { title, description, image } = req.body;
+    const { title, description, image, tags } = req.body;
     const id = req.params.id;
     await Item.findByIdAndUpdate(id, {
       title,
       description,
       image,
+      tags,
     });
     res.status(200).json({ message: "item has been updated." });
   } catch (e) {

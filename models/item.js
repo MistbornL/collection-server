@@ -8,7 +8,7 @@ const ItemSchema = new Schema({
   image: { type: String, default: "" },
   tags: {
     type: Array,
-    default: ["fantasy, bestAlbum, books, technic, movie, romance, bestSeller"],
+    default: [],
   },
   price: { type: Number, default: null },
   year: { type: String, default: null },
@@ -19,6 +19,7 @@ const ItemSchema = new Schema({
     default: [],
   },
   comments: { type: Array, default: [] },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Item = model("Item", ItemSchema);
