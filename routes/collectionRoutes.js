@@ -67,6 +67,7 @@ router.put("/update/:id", isLoggedIn, async (req, res) => {
 router.delete("/delete/:id", isLoggedIn, async (req, res) => {
   try {
     await Collection.remove({ _id: req.params.id });
+    await Item.remove({ collectionId: req.params.id });
     res.status(200).json({ message: "collection has been deleted." });
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
@@ -109,13 +110,15 @@ router.get("/userItems", async (req, res) => {
 
 router.post("/create/item", isLoggedIn, async (req, res) => {
   try {
-    const { createdBy, title, description, collectionId, image } = req.body;
+    const { createdBy, title, description, collectionId, image, tags } =
+      req.body;
     const item = new Item({
       createdBy,
       title,
       description,
       collectionId,
       image,
+      tags,
     });
     await item.save();
     res.status(200).json({ message: "item has been created." });
