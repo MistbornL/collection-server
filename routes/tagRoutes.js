@@ -35,6 +35,19 @@ router.get("/search/", async (req, res) => {
         }
       });
     });
+
+    items.map((item) => {
+      item.comments.map((comment) => {
+        if (
+          comment.comment
+            .toLocaleLowerCase()
+            .includes(req.query.tag.toLocaleLowerCase())
+        ) {
+          found.push(item);
+        }
+      });
+    });
+
     res.status(200).json(found);
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });

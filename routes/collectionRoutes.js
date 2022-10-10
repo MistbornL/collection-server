@@ -153,4 +153,35 @@ router.put("/item/update/:id", isLoggedIn, async (req, res) => {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
 });
+
+// comments and Like routes
+router.put("/item/like", isLoggedIn, async (req, res) => {
+  try {
+    const { id, likes } = req.body;
+    await Item.findByIdAndUpdate(id, { likes });
+    res.status(200).json({ message: "item has been liked." });
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
+router.put("/item/dislike", isLoggedIn, async (req, res) => {
+  try {
+    const { id, dislikes } = req.body;
+    await Item.findByIdAndUpdate(id, { dislikes });
+    res.status(200).json({ message: "item has been disliked." });
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
+router.put("/item/comment", isLoggedIn, async (req, res) => {
+  try {
+    const { id, comments } = req.body;
+    await Item.findByIdAndUpdate(id, { comments });
+    res.status(200).json({ message: "item has been commented." });
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
 module.exports = router;
