@@ -1,5 +1,10 @@
 const { Schema, model } = require("../db/connection");
+var dateObj = new Date();
+var month = dateObj.getUTCMonth() + 1; //months from 1-12
+var day = dateObj.getUTCDate();
+var year = dateObj.getUTCFullYear();
 
+var newDate = year + "/" + month + "/" + day;
 const UserSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
@@ -7,6 +12,8 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   role: { type: String, required: true, default: "user" },
   status: { type: String, required: true, default: "Active" },
+  dateLastAuthorization: { type: Date },
+  dateRegister: { type: Date, default: newDate },
 });
 
 // User model

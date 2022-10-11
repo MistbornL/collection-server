@@ -17,7 +17,7 @@ router.get("/", isLoggedIn, async (req, res) => {
         lastName: user.lastName,
         status: user.status,
         dateRegister: user.dateRegister,
-        dateLastAuthorization: user.dateLastAuthorization,
+        dateLastAuthorization: Date.now(),
       };
     });
     res.status(200).json(usersForFront);
@@ -67,6 +67,23 @@ router.put("/unblock/:email", isLoggedIn, async (req, res) => {
       res.status(200).json({ message: "User has been Unlocked." });
     } else {
       res.status(202).json({ message: "User is not blocked." });
+    }
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
+router.put("/changeRole/:email", isLoggedIn, async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    if (user.role === "user") {
+      user.role = "admin";
+      await user.save();
+      res.status(200).json({ message: "User role has been changed." });
+    } else {
+      user.role = "user";
+      await user.save();
+      res.status(200).json({ message: "User role has been changed." });
     }
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
