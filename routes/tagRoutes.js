@@ -30,7 +30,7 @@ router.get("/search/", async (req, res) => {
 
     items.map((item) => {
       item.tags.map((tag) => {
-        if (tag.toLocaleLowerCase() === req.query.tag.toLocaleLowerCase()) {
+        if (tag.toLowerCase().includes(req.query.tag.toLowerCase())) {
           found.push(item);
         }
       });

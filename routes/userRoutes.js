@@ -12,6 +12,9 @@ router.get("/", isLoggedIn, async (req, res) => {
         id: user._id,
         email: user.email,
         username: user.username,
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
         status: user.status,
         dateRegister: user.dateRegister,
         dateLastAuthorization: user.dateLastAuthorization,
@@ -34,8 +37,6 @@ router.get("/profile", isLoggedIn, async (req, res) => {
 });
 
 router.delete("/delete/:email", isLoggedIn, async (req, res) => {
-  console.log(req.params);
-  console.log(res);
   try {
     await User.remove({ email: req.params.email });
     res.status(200).json({ message: "User has been deleted." });
@@ -44,19 +45,22 @@ router.delete("/delete/:email", isLoggedIn, async (req, res) => {
   }
 });
 
-router.post("/block/:id", isLoggedIn, async (req, res) => {
-  console.log(req.params);
+router.put("/block/:email", isLoggedIn, async (req, res) => {
   try {
-    await User.findByIdAndUpdate(req.params.id, { status: "Blocked" });
+    await User.findOneAndUpdate(
+      { email: req.params.email },
+      { status: "Blocked" }
+    );
     res.status(200).json({ message: "User has been Blocked." });
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
 });
 
-router.post("/unlock/:id", isLoggedIn, async (req, res) => {
+router.put("/unblock/:email", isLoggedIn, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findOne({ email: req.params.email });
+    console.log(user);
     if (user.status === "Blocked") {
       user.status = "Offline";
       await user.save();
@@ -71,7 +75,7 @@ router.post("/unlock/:id", isLoggedIn, async (req, res) => {
 
 router.get("/logout", isLoggedIn, async (req, res) => {
   try {
-    await User.findByIdAndUpdate(req.user.userId, { status: "Offline" });
+    await User.findByIdAndUpdate(req.query.email, { status: "Offline" });
     res.status(200).json({ message: "User changed." });
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
