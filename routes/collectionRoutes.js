@@ -184,8 +184,9 @@ router.put("/item/dislike/:id", isLoggedIn, async (req, res) => {
 
 router.put("/item/comment", isLoggedIn, async (req, res) => {
   try {
-    const { id, comments } = req.body;
-    await Item.findByIdAndUpdate(id, { comments });
+    const { id } = req.body;
+    const item = await Item.findOne(id);
+    item.comments.push(req.body.comment);
     res.status(200).json({ message: "item has been commented." });
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
