@@ -90,13 +90,4 @@ router.put("/changeRole/:email", isLoggedIn, async (req, res) => {
   }
 });
 
-router.get("/logout", isLoggedIn, async (req, res) => {
-  try {
-    await User.findByIdAndUpdate(req.query.email, { status: "Offline" });
-    res.status(200).json({ message: "User changed." });
-  } catch (e) {
-    res.status(400).json({ message: "Something went wrong, try again." });
-  }
-});
-
 module.exports = router;

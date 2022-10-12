@@ -18,6 +18,7 @@ const ItemSchema = new Schema({
     type: Array,
     default: [],
   },
+  liked: { type: Boolean, default: false },
   comments: { type: Array, default: [] },
   createdAt: { type: Date, default: Date.now },
 });

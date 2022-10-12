@@ -61,7 +61,11 @@ router.post("/login", async (req, res) => {
 
 router.get("/logout", isLoggedIn, async (req, res) => {
   try {
-    res.status(200).json({ message: "User Logged Out." });
+    await User.findOneAndUpdate(
+      { email: req.query.email },
+      { status: "Offline" }
+    );
+    res.status(200).json({ message: "User changed." });
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
