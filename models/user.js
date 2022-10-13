@@ -14,6 +14,7 @@ const UserSchema = new Schema({
   status: { type: String, required: true, default: "Active" },
   dateLastAuthorization: { type: Date },
   dateRegister: { type: Date, default: newDate },
+  language: { type: String, required: true, default: "en" },
 });
 
 // User model

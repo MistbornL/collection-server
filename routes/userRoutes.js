@@ -36,6 +36,18 @@ router.get("/profile", isLoggedIn, async (req, res) => {
   }
 });
 
+router.put("/update/:id", isLoggedIn, async (req, res) => {
+  try {
+    const { language } = req.body;
+    await User.findByIdAndUpdate(req.params.id, {
+      language,
+    });
+    res.status(200).json({ message: "User has been updated." });
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
 router.delete("/delete/:email", isLoggedIn, async (req, res) => {
   try {
     await User.remove({ email: req.params.email });
