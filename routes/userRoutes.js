@@ -36,15 +36,9 @@ router.get("/profile", isLoggedIn, async (req, res) => {
   }
 });
 
-router.put("/language/:id", isLoggedIn, async (req, res) => {
+router.put("/language/:email", isLoggedIn, async (req, res) => {
   try {
-    const { language } = req.body;
-    await User.findOneAndUpdate(
-      { email: req.params.email },
-      {
-        language,
-      }
-    );
+    await User.findOneAndUpdate({ email: req.params.email }, req.body);
     res.status(200).json({ message: "User has been updated." });
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
