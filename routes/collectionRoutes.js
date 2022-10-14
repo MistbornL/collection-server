@@ -158,7 +158,6 @@ router.put("/item/like/:id", isLoggedIn, async (req, res) => {
   try {
     const item = await Item.findOne({ _id: req.params.id });
     item.likes.push(req.body.likedBy);
-    item.liked = true;
     item.save();
     res.status(200).json({ message: "item has been liked." });
   } catch (e) {
@@ -173,7 +172,7 @@ router.put("/item/dislike/:id", isLoggedIn, async (req, res) => {
   try {
     const item = await Item.findOne({ _id: req.params.id });
     item.likes.splice(item.likes.indexOf(req.body.disLikedBy), 1);
-    item.liked = false;
+
     item.save();
     res.status(200).json({ message: "item has been disliked." });
   } catch (e) {
