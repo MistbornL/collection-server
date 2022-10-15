@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (user.status === "Blocked") {
-      return res.status(400).json({ message: "This email is blocked." });
+      return res.status(403).json({ message: "This email is blocked." });
     }
 
     if (user) {
@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
         await user.save();
         res.json({ user, token, userId: user.id });
       } else {
-        res.status(403).json({ error: "password doesn't match" });
+        res.status(401).json({ error: "password doesn't match" });
       }
     } else {
       res.status(404).json({ error: "User doesn't exist" });

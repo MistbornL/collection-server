@@ -172,7 +172,6 @@ router.put("/item/dislike/:id", isLoggedIn, async (req, res) => {
   try {
     const item = await Item.findOne({ _id: req.params.id });
     item.likes.splice(item.likes.indexOf(req.body.disLikedBy), 1);
-
     item.save();
     res.status(200).json({ message: "item has been disliked." });
   } catch (e) {
