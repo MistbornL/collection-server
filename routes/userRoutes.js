@@ -36,6 +36,18 @@ router.get("/profile", isLoggedIn, async (req, res) => {
   }
 });
 
+router.put("/profile/theme", isLoggedIn, async (req, res) => {
+  try {
+    const { email, theme } = req.body;
+    const profile = await User.findOne({ email });
+    profile.theme = theme;
+    await profile.save();
+    res.status(200).json(profile);
+  } catch (e) {
+    res.status(400).json({ message: "Something went wrong, try again." });
+  }
+});
+
 router.put("/language/:email", isLoggedIn, async (req, res) => {
   try {
     await User.findOneAndUpdate({ email: req.params.email }, req.body);
