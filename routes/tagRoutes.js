@@ -27,6 +27,7 @@ router.get("/search/", async (req, res) => {
   try {
     const items = await Item.find();
     var found = [];
+    var unique = [...new Set(...found)];
 
     items.map((item) => {
       item.tags.map((tag) => {
@@ -48,7 +49,7 @@ router.get("/search/", async (req, res) => {
       });
     });
 
-    res.status(200).json(found);
+    res.status(200).json(unique);
   } catch (e) {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
