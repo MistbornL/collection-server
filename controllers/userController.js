@@ -32,12 +32,12 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     // check if the user exists
-    const user = await User.findOne({ email: req.body.email });
-    const date = new Date();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const newDate = year + "/" + month + "/" + day;
+    var user = await User.findOne({ email: req.body.email });
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var year = date.getFullYear();
+    var newDate = year + "/" + month + "/" + day;
 
     if (user.status === "Blocked") {
       return res.status(403).json({ message: "This email is blocked." });
