@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const User = require("../models/user");
 const { isLoggedIn } = require("../controllers/middleware");
+const Item = require("../models/item");
 
 const router = Router();
 
@@ -59,6 +60,13 @@ router.put("/language/:email", isLoggedIn, async (req, res) => {
 
 router.delete("/delete/:email", isLoggedIn, async (req, res) => {
   try {
+    const items = await Item.find();
+    items.forEach(async (item) => {
+      if (item.likes.includes(req.params.email)) {
+        item.likes = item.likes.filter((like) => like !== req.params.email);
+        await item.save();
+      }
+    });
     await User.remove({ email: req.params.email });
     res.status(200).json({ message: "User has been deleted." });
   } catch (e) {
