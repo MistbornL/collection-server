@@ -33,6 +33,11 @@ router.post("/login", async (req, res) => {
   try {
     // check if the user exists
     const user = await User.findOne({ email: req.body.email });
+    const date = new Date();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const newDate = year + "/" + month + "/" + day;
 
     if (user.status === "Blocked") {
       return res.status(403).json({ message: "This email is blocked." });
@@ -44,7 +49,7 @@ router.post("/login", async (req, res) => {
       if (result) {
         // sign token and send it in response
         const token = await jwt.sign({ email: user.email }, SECRET);
-        user.dateLastAuthorization = Date.now();
+        user.dateLastAuthorization = newDate;
         user.status = "Online";
         await user.save();
         res.json({ user, token, userId: user.id });
