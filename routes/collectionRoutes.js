@@ -39,8 +39,8 @@ router.get("/specific/:id", async (req, res) => {
 
 router.post("/create", isLoggedIn, async (req, res) => {
   try {
-    const { createdBy, title, description } = req.body;
-    const collection = new Collection({ createdBy, title, description });
+    const { createdBy, title, description, topic } = req.body;
+    const collection = new Collection({ createdBy, title, description, topic });
     await collection.save();
     res.status(200).json({ message: "collection has been created." });
   } catch (e) {
@@ -191,4 +191,17 @@ router.put("/item/comment", isLoggedIn, async (req, res) => {
     res.status(400).json({ message: "Something went wrong, try again." });
   }
 });
+
+// delete comment route
+// router.delete("item/comment/:id", isLoggedIn, async (req, res) => {
+//   try {
+//     const { id } = req.body;
+//     const item = await Item.findOne({ _id: id });
+//     item.comments.splice(item.comments.indexOf(req.body.comments), 1);
+//     item.save();
+//     res.status(200).json({ message: "comment deleted." });
+//   } catch (e) {
+//     res.status(400).json({ message: "Something went wrong, try again." });
+//   }
+// });
 module.exports = router;

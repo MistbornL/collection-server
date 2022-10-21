@@ -5,7 +5,7 @@ const CollectionSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true, unique: true },
   createdAt: { type: Date, default: Date.now },
-  tags: { type: Array, default: [] },
+  topic: { type: String },
 });
 
 const Collection = model("Collection", CollectionSchema);
