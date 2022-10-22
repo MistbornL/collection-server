@@ -30,6 +30,42 @@ router.post("/signup", async (req, res) => {
 
 // Login route to verify a user and get a token
 router.post("/login", async (req, res) => {
+  // if (req.body.googleAccessToken) {
+  //   // gogole-auth
+  //   const { googleAccessToken } = req.body;
+
+  //   axios
+  //     .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+  //       headers: {
+  //         Authorization: `Bearer ${googleAccessToken}`,
+  //       },
+  //     })
+  //     .then(async (response) => {
+  //       const firstName = response.data.given_name;
+  //       const lastName = response.data.family_name;
+  //       const email = response.data.email;
+  //       const picture = response.data.picture;
+
+  //       const existingUser = await User.findOne({ email });
+
+  //       if (!existingUser)
+  //         return res.status(404).json({ message: "User don't exist!" });
+
+  //       const token = jwt.sign(
+  //         {
+  //           email: existingUser.email,
+  //           id: existingUser._id,
+  //         },
+  //         config.get("JWT_SECRET"),
+  //         { expiresIn: "1h" }
+  //       );
+
+  //       res.status(200).json({ result: existingUser, token });
+  //     })
+  //     .catch((err) => {
+  //       res.status(400).json({ message: "Invalid access token!" });
+  //     });
+  // } else
   try {
     // check if the user exists
     var user = await User.findOne({ email: req.body.email });
@@ -48,7 +84,9 @@ router.post("/login", async (req, res) => {
       const result = await bcrypt.compare(req.body.password, user.password);
       if (result) {
         // sign token and send it in response
-        const token = await jwt.sign({ email: user.email }, SECRET);
+        const token = await jwt.sign({ email: user.email }, SECRET, {
+          expiresIn: 60 * 60,
+        });
         user.dateLastAuthorization = newDate;
         user.status = "Online";
         await user.save();
