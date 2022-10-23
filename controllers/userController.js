@@ -31,9 +31,6 @@ router.post("/signup", async (req, res) => {
 
 // Login route to verify a user and get a token
 router.post("/login", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-
   var date = new Date();
   var month = date.getMonth() + 1;
   var day = date.getDate();
@@ -47,6 +44,7 @@ router.post("/login", async (req, res) => {
     axios
       .get("https://www.googleapis.com/oauth2/v3/userinfo", {
         headers: {
+          "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${googleAccessToken}`,
         },
       })
