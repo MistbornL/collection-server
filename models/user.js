@@ -16,6 +16,7 @@ const UserSchema = new Schema({
   dateRegister: { type: Date, default: newDate },
   language: { type: String, required: true, default: "en" },
   theme: { type: String, required: true, default: "light" },
+  google: { type: Boolean, default: false },
 });
 
 // User model
