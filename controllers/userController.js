@@ -26,7 +26,6 @@ router.post("/signup", async (req, res) => {
         const firstName = response.data.given_name;
         const lastName = response.data.family_name;
         const email = response.data.email;
-        const picture = response.data.picture;
 
         const existingUser = await User.findOne({ email });
 
@@ -67,9 +66,19 @@ router.post("/signup", async (req, res) => {
 
 // Login route to verify a user and get a token
 router.post("/login", async (req, res) => {
+  var date = new Date();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+  var year = date.getFullYear();
+  var newDate = year + "/" + month + "/" + day;
+
   if (req.body.googleAccessToken) {
-    // gogole-auth
+    // google-auth
     const { googleAccessToken } = req.body;
+
+    if (user.status === "Blocked") {
+      return res.status(403).json({ message: "This email is blocked." });
+    }
 
     axios
       .get("https://www.googleapis.com/oauth2/v3/userinfo", {
@@ -81,22 +90,25 @@ router.post("/login", async (req, res) => {
         const firstName = response.data.given_name;
         const lastName = response.data.family_name;
         const email = response.data.email;
-        const picture = response.data.picture;
 
         const existingUser = await User.findOne({ email });
 
         if (!existingUser)
           return res.status(404).json({ message: "User don't exist!" });
-
+        else if (existingUser.status === "blocked") {
+          return res.status(403).json({ message: "user is blocked." });
+        }
         const token = jwt.sign(
           {
             email: existingUser.email,
             id: existingUser._id,
           },
-          config.get("JWT_SECRET"),
-          { expiresIn: "1h" }
+          SECRET,
+          { expiresIn: 60 * 60 }
         );
-
+        existingUser.dateLastAuthorization = newDate;
+        existingUser.status = "Online";
+        await user.save();
         res.status(200).json({ result: existingUser, token });
       })
       .catch((err) => {
@@ -105,13 +117,7 @@ router.post("/login", async (req, res) => {
   } else {
     try {
       // check if the user exists
-      var user = await User.findOne({ email: req.body.email });
-      var date = new Date();
-      var month = date.getMonth() + 1;
-      var day = date.getDate();
-      var year = date.getFullYear();
-      var newDate = year + "/" + month + "/" + day;
-
+      const user = await User.findOne({ email: req.body.email });
       if (user.status === "Blocked") {
         return res.status(403).json({ message: "This email is blocked." });
       }
