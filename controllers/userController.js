@@ -66,6 +66,9 @@ router.post("/signup", async (req, res) => {
 
 // Login route to verify a user and get a token
 router.post("/login", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
   var date = new Date();
   var month = date.getMonth() + 1;
   var day = date.getDate();
