@@ -16,6 +16,10 @@ const app = express();
 // GLOBAL MIDDLEWARE
 app.use(cors()); // add cors headers
 app.use(express.json()); // parse json bodies
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 
 app.get("/", (req, res) => {
   res.send("this is the test route to make sure server is working");
