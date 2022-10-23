@@ -76,10 +76,6 @@ router.post("/login", async (req, res) => {
     // google-auth
     const { googleAccessToken } = req.body;
 
-    if (user.status === "Blocked") {
-      return res.status(403).json({ message: "This email is blocked." });
-    }
-
     axios
       .get("https://www.googleapis.com/oauth2/v3/userinfo", {
         headers: {
