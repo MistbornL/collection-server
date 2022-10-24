@@ -147,13 +147,14 @@ router.delete("/delete/item/:id", isLoggedIn, async (req, res) => {
 
 router.put("/item/update/:id", isLoggedIn, async (req, res) => {
   try {
-    const { title, description, image, tags } = req.body;
+    const { title, description, image, tags, customFields } = req.body;
     const id = req.params.id;
     await Item.findByIdAndUpdate(id, {
       title,
       description,
       image,
       tags,
+      customFields,
     });
     res.status(200).json({ message: "item has been updated." });
   } catch (e) {
