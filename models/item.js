@@ -24,6 +24,7 @@ const ItemSchema = new Schema({
   },
   comments: { type: Array, default: [] },
   createdAt: { type: Date, default: newDate },
+  customFields: { type: Array },
 });
 
 const Item = model("Item", ItemSchema);

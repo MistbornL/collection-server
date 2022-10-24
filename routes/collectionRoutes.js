@@ -109,8 +109,15 @@ router.get("/userItems", async (req, res) => {
 
 router.post("/create/item", isLoggedIn, async (req, res) => {
   try {
-    const { createdBy, title, description, collectionId, image, tags } =
-      req.body;
+    const {
+      createdBy,
+      title,
+      description,
+      collectionId,
+      image,
+      tags,
+      customFields,
+    } = req.body;
     const item = new Item({
       createdBy,
       title,
@@ -118,6 +125,7 @@ router.post("/create/item", isLoggedIn, async (req, res) => {
       collectionId,
       image,
       tags,
+      customFields,
     });
     await item.save();
     res.status(200).json({ message: "item has been created." });
