@@ -61,8 +61,7 @@ router.post("/login", async (req, res) => {
               email: result.email,
               id: result._id,
             },
-            SECRET,
-            { expiresIn: 60 * 60 }
+            SECRET
           );
 
           return res.status(200).json({ token, result });
@@ -85,8 +84,7 @@ router.post("/login", async (req, res) => {
               email: result.email,
               id: result._id,
             },
-            SECRET,
-            { expiresIn: 60 * 60 }
+            SECRET
           );
           res.status(200).json({ result, token });
         }
@@ -108,9 +106,7 @@ router.post("/login", async (req, res) => {
         const result = bcrypt.compare(req.body.password, user.password);
         if (result) {
           // sign token and send it in response
-          const token = jwt.sign({ email: user.email }, SECRET, {
-            expiresIn: 60 * 60,
-          });
+          const token = jwt.sign({ email: user.email }, SECRET);
           user.dateLastAuthorization = newDate;
           user.status = "Online";
           await user.save();
