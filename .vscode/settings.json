@@ -1,2 +1,24 @@
 {
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "background.enabled": true,
+  "background.loop": false,
+  "background.useDefault": false,
+  "background.useFront": false,
+  "background.style": {
+    "content": "''",
+    "pointer-events": "none",
+    "position": "absolute",
+    "z-index": "99999",
+    "width": "70%",
+    "height": "100%",
+    "margin-left": "30%",
+    "background-position": "center center",
+    "background-size": "cover",
+    "background-repeat": "no-repeat",
+    "opacity": 0.2
+  },
+  "background.customImages": [
+    "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0a9c9fab-87f0-4659-a31b-e1e930c397c7/dej3tj6-00f4a5d0-cb15-403e-ac49-f93aa92b37f5.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzBhOWM5ZmFiLTg3ZjAtNDY1OS1hMzFiLWUxZTkzMGMzOTdjN1wvZGVqM3RqNi0wMGY0YTVkMC1jYjE1LTQwM2UtYWM0OS1mOTNhYTkyYjM3ZjUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.f81vAnw6hYKOvqEUoWPbQyDcSNXb_AIlIWgXSalAH8Q"
+  ]
 }

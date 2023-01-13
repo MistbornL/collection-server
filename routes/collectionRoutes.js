@@ -107,6 +107,19 @@ router.get("/userItems", async (req, res) => {
   }
 });
 
+// in case we need to view more
+// router.get("/specificItem", async (req, res) => {
+//   try {
+//     const item = await Item.find({
+//       _id: req.params.id,
+//     });
+
+//     res.status(200).json(item);
+//   } catch (e) {
+//     res.status(400).json({ message: "Something went wrong, try again." });
+//   }
+// });
+
 router.post("/create/item", isLoggedIn, async (req, res) => {
   try {
     const {
