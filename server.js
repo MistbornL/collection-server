@@ -14,7 +14,11 @@ const { PORT = 5000 } = process.env;
 const app = express();
 
 // GLOBAL MIDDLEWARE
-app.use(cors()); // add cors headers
+app.use(
+  cors({
+    origin: "https://collection-eta.vercel.app",
+  })
+);
 app.use(express.json()); // parse json bodies
 
 app.get("/", (req, res) => {
